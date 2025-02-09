@@ -35,7 +35,7 @@ COLOR_CONNECTED    = (0, 255, 0)   # Green
 COLOR_RECEIVING    = (0, 0, 255)   # Blue
 
 # ------------- Setup Hardware ------------- #
-
+# Clean Display first
 displayio.release_displays()
 
 # Use for I2C
@@ -63,7 +63,6 @@ pixel = neopixel.NeoPixel(board.NEOPIXEL, 1, brightness=0.2, auto_write=True)
 pixel[0] = COLOR_DISCONNECTED
 
 # BOOT/USER button setup
-# NOTE: Adjust to the actual pin if the BOOT button is not user-accessible.
 button = keypad.Keys((board.BUTTON,), value_when_pressed=False)
 
 # ------------- Variables ------------- #
@@ -169,12 +168,11 @@ while True:
         update_neopixel()  # Return to connected or disconnected color
 
     # 2) Check if the button is pressed; if so, send a LoRa packet
-    
     button_press = button.events.get()
     if button_press:
         if button_press.pressed:
             # Actually send something
-            send_str = "Hi RP2040 1"
+            send_str = "txtMessage"
             rfm9x.send(send_str.encode("utf-8"))
             print("Package Sent")
         else:
